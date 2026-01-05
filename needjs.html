@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>創造と接続：成功の二柱 - プロトタイプ</title>
+    <style>
+        :root {
+            --font-size-normal: 24px;
+            --font-size-title: 36px;
+            --box-bg: rgba(255, 255, 255, 0.85);
+            --accent-color: #1a73e8;
+        }
+
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: transparent;
+            transition: all 0.5s ease;
+        }
+
+        /* 端末シミュレート */
+        body.mode-mobile { max-width: 375px; margin: 0 auto; border: 10px solid #333; border-radius: 30px; height: 812px; overflow-y: scroll; position: relative; }
+        body.mode-tablet { max-width: 768px; margin: 0 auto; border: 15px solid #333; border-radius: 20px; height: 1024px; overflow-y: scroll; position: relative; }
+
+        .container {
+            width: 95%;
+            max-width: 1000px;
+            margin: 20px auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ナビゲーション */
+        .top-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 2000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .top-nav button, .side-nav-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .device-group {
+            display: flex;
+            gap: 5px;
+            margin-left: 20px;
+            padding-left: 20px;
+            border-left: 2px solid #ddd;
+        }
+
+        /* サイドバー */
+        #side-bar {
+            position: fixed;
+            top: 100px;
+            width: 160px;
+            z-index: 3000;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .side-right { right: 20px; }
+        .side-left { left: 20px; }
+
+        .side-label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #444;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        /* コンテンツ */
+        .content-box {
+            background: var(--box-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .title { font-size: var(--font-size-title); font-weight: bold; color: var(--accent-color); margin-bottom: 15px; }
+        .normal { font-size: var(--font-size-normal); line-height: 1.6; }
+
+        /* Canva埋め込み */
+        .canva-wrapper {
+            position: relative; width: 100%; height: 0; padding-top: 55.8342%;
+            margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+            border-radius: 8px;
+        }
+
+        /* 広告プレースホルダー */
+        .ad-space {
+            width: 100%;
+            min-height: 100px;
+            background: rgba(0, 0, 0, 0.05);
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            #side-bar { display: none; }
+        }
+    </style>
+</head>
+<body id="main-body">
+
+<nav class="top-nav">
+    <button onclick="showPage('main')">Main</button>
+    <button onclick="showPage('sub')">試験のコツ</button>
+    <button onclick="showPage('contact')">Contact</button>
+    <div class="device-group">
+        <button style="background: #34a853;" onclick="setDevice('pc')">PC</button>
+        <button style="background: #34a853;" onclick="setDevice('tablet')">Tablet</button>
+        <button style="background: #34a853;" onclick="setDevice('mobile')">Mobile</button>
+    </div>
+</nav>
+
+<div id="side-bar" class="side-right">
+    <div class="side-label">CONTROLS</div>
+    <button class="side-nav-btn" style="background:#555;" onclick="toggleSide()">端を切り替え</button>
+    <button class="side-nav-btn" style="background:#4285f4;" onclick="showPage('main')">Home (Main)</button>
+    
+    <div class="side-label" style="margin-top:10px;">NAVIGATION</div>
+    <button class="side-nav-btn" onclick="showPage('sub')">試験のコツ</button>
+    <button class="side-nav-btn" onclick="showPage('contact')">Contact</button>
+</div>
+
+<div class="container" id="content-display"></div>
+<a href="https://example.com/target-page.html">
+    <div>
+        <!-- クリックしたいコンテンツ（テキスト、画像など）をここに入れます -->
+        <p>この画面をクリックして別のページへ移動</p>
+    </div>
+</a>
+<script src="layout.js"></script>
+<script src="slide.js"></script>
+
+<script>
+    const siteContent = {
+        main: [
+            { type: 'title', text: '『創造と接続：成功の二柱』' },
+            { 
+                type: 'canva', 
+                src: "https://www.canva.com/design/DAG9D8TadyA/ypSE7QLdwRfxd5HLBWGksA/view?embed",
+                url: 'https://v0-dev-ardinal-splatoon-3-dgame-and.vercel.app/',
+                urlTitle: 'Splatoon 3 D-Game Prototype'
+            }
+        ],
+        sub: [
+            { type: 'title', text: '試験のコツ ＆ ツール' },
+            { type: 'normal', text: 'ここでは、JS経由で読み込まれる動的ツールが表示される予定です。' },
+            { type: 'js_tool_placeholder', id: 'external-tool-container' }, // 外部ツール用
+            { type: 'ad', label: '試験対策スポンサー' } // 広告枠
+        ],
+        contact: [
+            { type: 'title', text: 'Contact' },
+            { type: 'normal', text: 'プロジェクトに関するお問い合わせはこちらまで。' },
+            { type: 'ad', label: 'お勧めリンク' } // 広告枠
+        ]
+    };
+
+    function updateContent(pageId) {
+        const display = document.getElementById('content-display');
+        const data = siteContent[pageId];
+        display.innerHTML = '';
+
+        data.forEach(item => {
+            const box = document.createElement('div');
+            box.className = 'content-box';
+
+            if (item.type === 'title') {
+                box.innerHTML = `<div class="title">${item.text}</div>`;
+            } 
+            else if (item.type === 'normal') {
+                box.innerHTML = `<div class="normal">${item.text}</div>`;
+            } 
+            else if (item.type === 'canva') {
+                box.innerHTML = `
+                    <div class="canva-wrapper">
+                        <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none;"
+                            src="${item.src}" allowfullscreen></iframe>
+                    </div>
+                    <a href="${item.url}" target="_blank" style="display:block; margin-top:15px; text-decoration:none; color:var(--accent-color); font-weight:bold;">
+                        🔗 ${item.urlTitle}
+                    </a>
+                `;
+            }
+            else if (item.type === 'js_tool_placeholder') {
+                box.innerHTML = `
+                    <div id="${item.id}" style="min-height:300px; background:rgba(255,255,255,0.5); border-radius:10px; padding:20px;">
+                        <p style="color:#666; text-align:center;">[外部Web機能 読み込み待機中...]</p>
+                    </div>
+                `;
+                // ここで外部JSの読み込み関数などを呼び出す準備
+                console.log("External tool container ready: ", item.id);
+            }
+            else if (item.type === 'ad') {
+                box.innerHTML = `<div class="ad-space">Google広告: ${item.label}</div>`;
+            }
+            
+            display.appendChild(box);
+        });
+    }
+
+    function showPage(pageId) { updateContent(pageId); window.scrollTo(0,0); }
+    
+    function toggleSide() {
+        const bar = document.getElementById('side-bar');
+        bar.classList.toggle('side-right');
+        bar.classList.toggle('side-left');
+    }
+
+    function setDevice(mode) {
+        document.body.className = mode === 'pc' ? '' : 'mode-' + mode;
+        window.dispatchEvent(new Event('resize'));
+    }
+
+    window.onload = () => showPage('main');
+
+
+</script>
+</body>
+</html>

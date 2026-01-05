@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOUNOU - Modern LP</title>
+    <style>
+        :root {
+            --accent-blue: #1a73e8;
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        /* 背景動画 */
+        .video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            filter: brightness(0.5) contrast(1.1); /* 視認性向上のため調整 */
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.7) 0%, transparent 100%);
+            z-index: 0;
+        }
+
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ナビゲーション（ボタンを削除し、ロゴのみに） */
+        .top-nav {
+            padding: 40px 10%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .logo:hover { opacity: 0.7; }
+
+        /* コンテンツエリア */
+        .content-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 10%;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hero-text {
+            max-width: 700px;
+        }
+
+        /* タイトルの変更 */
+        h1 {
+            font-size: 8rem; /* より大胆なサイズへ */
+            font-weight: 900;
+            line-height: 0.9;
+            margin: 10px 0 30px 0;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff, #999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sub-copy {
+            letter-spacing: 8px;
+            color: var(--accent-blue);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .cta-button {
+            background: var(--accent-blue);
+            color: white;
+            padding: 22px 50px;
+            border: none;
+            border-radius: 4px; /* 少しエッジを効かせる */
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 15px 35px rgba(26, 115, 232, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background: #1864cc;
+        }
+
+        /* セクション切り替え用の状態 */
+        .hidden {
+            display: none !important;
+            opacity: 0;
+        }
+
+        /* Contact用のグラスカード */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            padding: 50px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .glass-card h2 { font-size: 2.5rem; margin-top: 0; }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            margin: 12px 0;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: white;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--accent-blue); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop playsinline class="video-background">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-athlete-getting-ready-to-run-4034-large.mp4" type="video/mp4">
+    </video>
+
+    <div class="overlay"></div>
+
+    <div class="main-wrapper">
+        <nav class="top-nav">
+            <div class="logo" onclick="showPage('main')">YOUNOU</div>
+        </nav>
+
+        <section id="page-main" class="content-section">
+            <div class="hero-text">
+                <span class="sub-copy">YOU KNOW or</span>
+                <h1>YOUKNOW or YOUNOU</h1>
+                <p style="font-size: 1.4rem; margin-bottom: 50px; opacity: 0.8; line-height: 1.6;">
+                    創造と接続：成功の二柱。<br>
+                    資格勉強で役立ったサイト紹介？！
+                </p>
+                <button class="cta-button" onclick="showPage('contact')">Get Started</button>
+            </div>
+        </section>
+
+        <section id="page-contact" class="content-section hidden">
+            <div class="glass-card">
+                <h2>Contact</h2>
+                <p style="opacity: 0.7; margin-bottom: 30px;">必要事項をご記入の上、送信してください。</p>
+                <form onsubmit="event.preventDefault(); alert('送信されました（プロトタイプ）');">
+                    <input type="text" placeholder="Full Name" required>
+                    <input type="email" placeholder="Email Address" required>
+                    <textarea placeholder="Message" rows="4" required></textarea>
+                    <button type="submit" class="cta-button" style="width: 100%; margin-top: 20px;">Send Message</button>
+                </form>
+                <p onclick="showPage('main')" style="text-align: center; margin-top: 25px; cursor: pointer; font-size: 0.9rem; opacity: 0.5; text-decoration: underline;">
+                    Return to Home
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            const main = document.getElementById('page-main');
+            const contact = document.getElementById('page-contact');
+
+            // フェードアウト
+            main.style.opacity = '0';
+            contact.style.opacity = '0';
+
+            setTimeout(() => {
+                if (pageId === 'contact') {
+                    main.classList.add('hidden');
+                    contact.classList.remove('hidden');
+                    setTimeout(() => contact.style.opacity = '1', 50);
+                } else {
+                    contact.classList.add('hidden');
+                    main.classList.remove('hidden');
+                    setTimeout(() => main.style.opacity = '1', 50);
+                }
+            }, 400);
+        }
+    </script>
+</body>
+</html>

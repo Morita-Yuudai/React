@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YOUNOU Learning Hub</title>
+
+<style>
+/* ===============================
+   ROOT & RESET
+================================ */
+:root {
+    --accent-blue: #1a73e8;
+    --glass-bg: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.2);
+    --font-size-normal: 24px;
+    --font-size-title: 36px;
+    --box-bg: rgba(255,255,255,0.85);
+}
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    font-family: 'Inter', -apple-system, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #000;
+}
+
+/* ===============================
+   HERO (VIDEO LP)
+================================ */
+#hero {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ビデオを確実に見せるための修正 */
+.video-background {
+    position: absolute; /* fixedからabsoluteに変更しhero内に固定 */
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -2; /* 最背面 */
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    filter: brightness(0.6) contrast(1.1);
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(0,0,0,0.6), transparent);
+    z-index: -1; /* ビデオの上、テキストの下 */
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 5;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-nav {
+    padding: 40px 10%;
+}
+
+.hero-logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+.hero-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+}
+
+.hero-text {
+    max-width: 720px;
+}
+
+.sub-copy {
+    letter-spacing: 8px;
+    color: var(--accent-blue);
+    font-weight: bold;
+}
+
+.hero-text h1 {
+    font-size: 8rem;
+    line-height: 0.9;
+    margin: 10px 0 30px;
+    text-transform: uppercase;
+    background: linear-gradient(to bottom, #aa3f3f, #999);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cta-button {
+    background: var(--accent-blue);
+    color: white;
+    padding: 22px 50px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(26,115,232,0.3);
+    transition: transform 0.3s ease;
+}
+
+.cta-button:hover { transform: scale(1.05); }
+
+/* ===============================
+   APP AREA
+================================ */
+#app-section {
+    position: relative;
+    z-index: 10;
+    background: #f4f4f4; /* アプリエリアを見やすくするために背景色を追加 */
+    min-height: 100vh;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(131, 77, 77, 0.95);
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.top-nav button {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#side-bar {
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    width: 160px;
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 15px;
+    z-index: 100;
+}
+
+.side-nav-btn {
+    background: var(--accent-blue);
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.container {
+    width: 95%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.content-box {
+    background: var(--box-bg);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.title {
+    font-size: var(--font-size-title);
+    font-weight: bold;
+    color: var(--accent-blue);
+    margin-bottom: 20px;
+}
+
+.normal {
+    font-size: var(--font-size-normal);
+    line-height: 1.6;
+}
+
+.canva-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 56%;
+    margin-top: 20px;
+}
+
+.canva-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* フォームの簡易スタイル */
+.form-body {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+}
+.form-input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .hero-text h1 { font-size: 4rem; }
+    #side-bar { display: none; }
+}
+</style>
+
+</head>
+
+<body id="main-body">
+
+<section id="hero">
+    <style>
+        #hero {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* 画面いっぱいに広げる */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: #000; /* 動画読み込み前の背景 */
+        }
+
+        .video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 中央寄せ */
+            min-width: 100%; 
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 0; /* 最背面 */
+            object-fit: cover; /* 画面にフィットさせる */
+            pointer-events: none; /* 動画へのクリックを無効化してボタンを押しやすくする */
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* 動画を少し暗くして文字を見やすくする */
+            z-index: 1; /* 動画の上、文字の下 */
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2; /* 文字を一番手前に */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+
+    <video autoplay muted loop playsinline class="video-background">
+        <source src="1080.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <div class="overlay"></div>
+
+    <div class="hero-inner">
+        <div class="hero-nav">
+            <div class="hero-logo" onclick="scrollToApp()">YOUNOU</div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <span class="sub-copy">YOU KNOW or</span>
+                <h1>YOUNOU</h1>
+                <p style="font-size:1.4rem; opacity:.8;">
+                    創造と接続：成功の二柱。<br>
+                    学習・試験・思考のハブ。
+                </p>
+                <button class="cta-button" onclick="scrollToApp()">Explore</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="app-section">
+    <nav class="top-nav">
+        <button onclick="showPage('main')">Main</button>
+        <button onclick="showPage('sub')">試験のコツ</button>
+        <button onclick="showPage('contact')">Contact</button>
+    </nav>
+
+    <div id="side-bar">
+        <button class="side-nav-btn" onclick="showPage('main')">Main</button>
+        <button class="side-nav-btn" onclick="showPage('sub')">試験</button>
+        <button class="side-nav-btn" onclick="showPage('contact')">Contact</button>
+    </div>
+
+    <div class="container" id="content-display">
+        </div>
+    
+    <div id="contact-form-container" style="display:none;">
+        <div class="form-body">
+            <p style="font-size: 14px; margin-bottom: 10px; color:#333;">ページを見ながら質問を入力できます。</p>
+            <input type="text" placeholder="Name" class="form-input">
+            <input type="email" placeholder="Email" class="form-input">
+            <textarea placeholder="Message" rows="4" class="form-input"></textarea>
+            <button class="cta-button" style="width: 100%; padding: 10px;">Send Message</button>
+        </div>
+    </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="slide.js"></script>
+
+<script>
+/* ===============================
+   CONTENT SYSTEM
+================================ */
+const siteContent = {
+    main: [
+        { type: 'title', text: '創造と接続：成功の二柱' },
+        {
+            type: 'slide',
+            id: 'slide-area',
+            section: 1,
+            slides: [
+                { title:'Intro', subTitle:'Why Learn?', body:'学習は知識の蓄積ではなく、接続の設計である。' },
+                { title:'Method', subTitle:'How', body:'体験→抽象→再利用。この循環が重要。' },
+                { title:'Output', subTitle:'Result', body:'学習は成果物として残すことで価値を持つ。' }
+            ]
+        },
+        {
+            type: 'canva',
+            src: "https://www.canva.com/design/DAG9D8TadyA/ypSE7QLdwRfxd5HLBWGksA/view?embed",
+            url: "https://v0-dev-ardinal-splatoon-3-dgame-and.vercel.app/",
+            urlTitle: "Splatoon 3 D-Game Prototype"
+        }
+    ],
+    sub: [
+        { type:'title', text:'試験のコツ' },
+        { type:'normal', text:'理解優先・時間管理・反復。' }
+    ],
+    contact: [
+        { type:'title', text:'Contact' },
+        { type:'normal', text:'お問い合わせはこちら。' }
+    ]
+};
+
+function updateContent(pageId) {
+    const display = document.getElementById('content-display');
+    const contactForm = document.getElementById('contact-form-container');
+    display.innerHTML = '';
+
+    // Contactページの場合のみフォームを表示するロジック（オプション）
+    if(pageId === 'contact') {
+        contactForm.style.display = 'block';
+    } else {
+        contactForm.style.display = 'none';
+    }
+
+    siteContent[pageId].forEach(item => {
+        const box = document.createElement('div');
+        box.className = 'content-box';
+
+        if (item.type === 'title') {
+            box.innerHTML = `<div class="title">${item.text}</div>`;
+        }
+        else if (item.type === 'normal') {
+            box.innerHTML = `<div class="normal">${item.text}</div>`;
+        }
+        else if (item.type === 'slide') {
+            box.innerHTML = `<div id="${item.id}" style="height:400px;"></div>`;
+            display.appendChild(box);
+            if(typeof SlideSystem !== 'undefined') {
+                new SlideSystem(item.id, item.slides, item.section);
+            }
+            return;
+        }
+        else if (item.type === 'canva') {
+            box.innerHTML = `
+                <div class="canva-wrapper">
+                    <iframe src="${item.src}" allowfullscreen></iframe>
+                </div>
+                <a href="${item.url}" target="_blank"
+                   style="display:block;margin-top:15px;font-weight:bold;color:var(--accent-blue);">
+                   🔗 ${item.urlTitle}
+                </a>
+            `;
+        }
+        display.appendChild(box);
+    });
+}
+
+function showPage(pageId) {
+    updateContent(pageId);
+    scrollToApp();
+}
+
+function scrollToApp() {
+    document.getElementById('app-section').scrollIntoView({ behavior:'smooth' });
+}
+
+window.onload = () => showPage('main');
+</script>
+</body>
+</html>

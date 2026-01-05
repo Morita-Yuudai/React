@@ -1,0 +1,268 @@
+
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>創造と接続：成功の二柱 - 完成版</title>
+    <style>
+        :root {
+            --font-size-normal: 24px;
+            --font-size-title: 36px;
+            --box-bg: rgba(255, 255, 255, 0.85);
+            --accent-color: #1a73e8;
+            --preview-width: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: transparent;
+            transition: all 0.5s ease;
+        }
+
+        /* 端末シミュレート */
+        body.mode-mobile { max-width: 375px; margin: 0 auto; border: 10px solid #333; border-radius: 30px; height: 812px; overflow-y: scroll; position: relative; }
+        body.mode-tablet { max-width: 768px; margin: 0 auto; border: 15px solid #333; border-radius: 20px; height: 1024px; overflow-y: scroll; position: relative; }
+
+        .container {
+            width: 95%;
+            max-width: 1000px;
+            margin: 20px auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ナビゲーション */
+        .top-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 2000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .top-nav button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .device-group {
+            display: flex;
+            gap: 5px;
+            margin-left: 20px;
+            padding-left: 20px;
+            border-left: 2px solid #ddd;
+        }
+
+        /* テキストボックス */
+        .content-box {
+            background: var(--box-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .title { font-size: var(--font-size-title); font-weight: bold; color: var(--accent-color); margin-bottom: 10px; }
+        .normal { font-size: var(--font-size-normal); line-height: 1.6; }
+
+        /* スライドエリア */
+        .slide-frame {
+            position: relative;
+            width: 100%;
+            min-height: 400px;
+            background: linear-gradient(45deg, #1a73e8, #34a853);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* 広告バー：グラデーションを隠しきらない透過バー */
+        .ad-bar-overlay {
+            position: absolute;
+            bottom: 20px;
+            width: 85%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        /* リンクプレビュー */
+        .lp-card {
+            display: flex;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #eee;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .lp-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .lp-thumb { width: 180px; background: #eee; flex-shrink: 0; }
+
+        /* サイドバー */
+        #side-bar {
+            position: fixed; top: 120px; width: 140px; z-index: 100;
+            background: rgba(128, 128, 128, 0.2); padding: 15px; border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        .side-right { right: 15px; }
+        .side-left { left: 15px; }
+
+        @media (max-width: 768px) {
+            #side-bar { display: none; }
+            .device-group { border: none; margin: 10px 0 0 0; padding: 0; }
+        }
+    </style>
+</head>
+<body id="main-body">
+
+<nav class="top-nav">
+    <button onclick="showPage('main')">Main</button>
+    <button onclick="showPage('sub')">試験のコツ</button>
+    <button onclick="showPage('contact')">Contact</button>
+    <div class="device-group">
+        <button style="background: #34a853;" onclick="setDevice('pc')">PC版</button>
+        <button style="background: #34a853;" onclick="setDevice('tablet')">iPad版</button>
+        <button style="background: #34a853;" onclick="setDevice('mobile')">スマホ版</button>
+    </div>
+</nav>
+
+<div id="side-bar" class="side-right">
+    <button onclick="toggleSide()" style="width:100%; margin-bottom:10px;">端切り替え</button>
+    <button onclick="showPage('main')" style="width:100%;">Home</button>
+</div>
+
+<div class="container" id="content-display">
+    </div>
+
+<script src="layout.js"></script>
+<script>
+    /**
+     * 【一元管理】サイトコンテンツデータ
+     */
+    const siteContent = {
+        main: [
+            { type: 'title', text: '『緊急？！ 応用・高度試験紹介』' },
+            { type: 'normal', text: 'あなたに届けたい1000時間のオモイ。技術の「創造」と市場への「接続」を統合したアーキテクチャの本質をここに。' },
+            { 
+                type: 'slide_section', 
+                slideTitle: 'Modern Code, Timeless Design', 
+                slideDesc: 'React実装と応用情報技術者試験から学ぶアーキテクチャの本質',
+                url: 'https://v0-dev-ardinal-splatoon-3-dgame-and.vercel.app/',
+                urlTitle: 'Splatoon 3 D-Game Prototype'
+            },
+            { type: 'normal', text: 'まとめ：優れた設計（創造）は、常に明確な出口（接続）を求めています。' }
+        ],
+        sub: [
+            { type: 'title', text: '試験のコツ：2箇条' },
+            { type: 'normal', text: '1. RASISを単なる単語ではなく、システム品質の「接続要件」として理解する。' },
+            { type: 'normal', text: '2. 広告ポリシーを「UXの技術仕様書」として捉え、不承認リスクを創造段階で排除する。' }
+        ],
+        contact: [
+            { type: 'title', text: 'Contact & Resources' },
+            { 
+                type: 'slide_section', 
+                slideTitle: 'Next Step Resources', 
+                slideDesc: '次回のアップデートをお楽しみに。',
+                url: '', // URLがない場合、自動で広告バーが出るテスト用
+                urlTitle: ''
+            }
+        ]
+    };
+
+    /**
+     * 指定されたページを描画するメイン関数
+     */
+    function updateContent(pageId) {
+        const display = document.getElementById('content-display');
+        const data = siteContent[pageId];
+        let html = '';
+
+        data.forEach(item => {
+            if (item.type === 'title') {
+                html += `<div class="content-box"><div class="title">${item.text}</div></div>`;
+            } else if (item.type === 'normal') {
+                html += `<div class="content-box"><div class="normal">${item.text}</div></div>`;
+            } else if (item.type === 'slide_section') {
+                // スライド枠の生成
+                html += `<div class="content-box" style="padding:15px;">
+                            <div class="slide-frame">
+                                <div class="title" style="color:white; font-size:40px;">${item.slideTitle}</div>
+                                <div class="normal" style="color:white; font-size:22px;">${item.slideDesc}</div>
+                                
+                                ${!item.url ? `
+                                    <div class="ad-bar-overlay">
+                                        [PR] Google広告：URL未設定時に優先表示される広告エリア
+                                    </div>
+                                ` : ''}
+                            </div>`;
+                
+                // URLがある場合のみリンクプレビューを表示
+                if (item.url) {
+                    html += `
+                        <a href="${item.url}" target="_blank" class="lp-card">
+                            <div class="lp-thumb" style="background: #333 url('https://v0-dev-ardinal-splatoon-3-dgame-and.vercel.app/og-image.png') center/cover;"></div>
+                            <div class="lp-content" style="padding:20px;">
+                                <div style="font-weight:bold; font-size:20px;">${item.urlTitle}</div>
+                                <div style="font-size:14px; color:#666; margin-top:5px;">${item.url}</div>
+                                <div style="font-size:14px; color:var(--accent-color); margin-top:10px;">サイトを確認する →</div>
+                            </div>
+                        </a>`;
+                }
+                html += `</div>`;
+            }
+        });
+        display.innerHTML = html;
+    }
+
+    function showPage(pageId) {
+        updateContent(pageId);
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function setDevice(mode) {
+        const body = document.getElementById('main-body');
+        body.className = ''; 
+        if (mode === 'mobile') body.classList.add('mode-mobile');
+        if (mode === 'tablet') body.classList.add('mode-tablet');
+        window.dispatchEvent(new Event('resize'));
+    }
+
+    function toggleSide() {
+        const bar = document.getElementById('side-bar');
+        bar.classList.toggle('side-right');
+        bar.classList.toggle('side-left');
+    }
+
+    window.onload = () => showPage('main');
+</script>
+</body>
+</html>

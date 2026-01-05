@@ -1,0 +1,36 @@
+ <div class="content-box">
+            <div class="title">必見：Google広告ポリシー</div>
+            <a href="https://support.google.com/adspolicy/answer/6368661?hl=ja#674" class="lp-card">
+                <div class="lp-thumb"></div>
+                <div class="lp-content" style="padding:15px;">
+                    <strong>機能していないリンク先について</strong><br>
+                    <span style="font-size:16px; color:#666;">広告審査を通すための必須知識。サイトの到達可能性を確保せよ。</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="content-box" style="padding:10px;">
+            <div id="slide-area">
+                <div id="slide-content" class="title" style="color:white; text-align:center;">Loading...</div>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <div class="normal">まとめ：RASIS（信頼性・可用性・保守性・完全性・安全性）を意識したサイト設計が、結果として広告ポリシーへの準拠にも繋がります。</div>
+            <div class="title">追記：成功を支える二柱</div>
+        </div>
+    </div>
+
+    <div id="sub" class="page-content">
+        <div class="content-box">
+            <div class="title">試験のコツ：2箇条</div>
+            <div class="normal">
+                1. 専門用語の「定義」を正確に理解し、午後の記述式で使えるようにする。<br>
+                2. 過去問演習では「なぜその答えになるか」のプロセスを徹底解説できるまで繰り返す。
+            </div>
+        </div>
+        <div class="content-box">
+            <div class="title">sub: 実装予定</div>
+            <div class="normal">現在、詳細な攻略データを解析中です。</div>
+        </div>
+    </div>
