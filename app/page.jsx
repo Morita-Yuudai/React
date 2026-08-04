@@ -1,9 +1,9 @@
-import { VideoGenHero } from "@/src/features/video-gen";
+import { ImageGenHero } from "@/src/features/image-gen";
 
 export default function HomePage() {
   return (
     <main>
-      <VideoGenHero demoVideoSrc="/video-gen/demo-fallback.mp4" />
+      <ImageGenHero />
     </main>
   );
 }

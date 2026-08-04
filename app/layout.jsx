@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Adventure Park | AI Transformation Demo",
-  description: "リストバンドをAIで変身させる背景動画デモサイト",
+  title: "Adventure Park | AI Background Generator",
+  description: "AIエージェントが言葉から背景画像を生成するデモサイト",
 };
 
 export default function RootLayout({ children }) {
