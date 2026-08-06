@@ -6,7 +6,7 @@
  */
 
 const API_BASE_URL = "https://api.openai.com/v1";
-const DEFAULT_MODEL = "gpt-image-1";
+const DEFAULT_MODEL = "gpt-image-1-mini";
 const DEFAULT_SIZE = "1536x1024";
 
 function escapeXml(value) {
