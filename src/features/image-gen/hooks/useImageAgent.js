@@ -21,7 +21,7 @@ export function useImageAgent({ initialImageUrl = null } = {}) {
       const res = await fetch("/api/image-gen/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, size: options.size }),
+        body: JSON.stringify({ prompt, size: options.size, image: options.image }),
       });
 
       const data = await res.json();

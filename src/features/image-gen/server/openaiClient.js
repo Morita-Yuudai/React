@@ -43,13 +43,33 @@ function mockImage(prompt) {
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
 }
 
-export async function generateImage({ prompt, size = DEFAULT_SIZE, model = DEFAULT_MODEL }) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return { url: mockImage(prompt) };
+function parseImageDataUrl(dataUrl) {
+  const match = /^data:([^;]+);base64,(.+)$/.exec(dataUrl);
+  if (!match) {
+    throw new Error("Uploaded image must be a base64 data URL");
   }
+  const [, mimeType, base64] = match;
+  return { mimeType, buffer: Buffer.from(base64, "base64") };
+}
 
-  const res = await fetch(`${API_BASE_URL}/images/generations`, {
+function requestImageEdit({ apiKey, prompt, size, model, image }) {
+  const { mimeType, buffer } = parseImageDataUrl(image);
+  const form = new FormData();
+  form.append("model", model);
+  form.append("prompt", prompt);
+  form.append("size", size);
+  form.append("n", "1");
+  form.append("image", new Blob([buffer], { type: mimeType }), "upload.png");
+
+  return fetch(`${API_BASE_URL}/images/edits`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}` },
+    body: form,
+  });
+}
+
+function requestImageGeneration({ apiKey, prompt, size, model }) {
+  return fetch(`${API_BASE_URL}/images/generations`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -57,6 +77,20 @@ export async function generateImage({ prompt, size = DEFAULT_SIZE, model = DEFAU
     },
     body: JSON.stringify({ model, prompt, size, n: 1 }),
   });
+}
+
+// `image` is an optional uploaded reference (data URL) from the user. In
+// mock mode we can't call OpenAI, so an uploaded image is shown as-is
+// instead of the gradient placeholder — upload still works with no key.
+export async function generateImage({ prompt, size = DEFAULT_SIZE, model = DEFAULT_MODEL, image }) {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    return { url: image ?? mockImage(prompt) };
+  }
+
+  const res = image
+    ? await requestImageEdit({ apiKey, prompt, size, model, image })
+    : await requestImageGeneration({ apiKey, prompt, size, model });
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
@@ -64,13 +98,13 @@ export async function generateImage({ prompt, size = DEFAULT_SIZE, model = DEFAU
   }
 
   const data = await res.json();
-  const image = data.data?.[0];
-  if (!image) {
+  const result = data.data?.[0];
+  if (!result) {
     throw new Error("OpenAI returned no image data");
   }
 
   // gpt-image-1 returns base64; some models (e.g. dall-e-2/3) return a url instead.
   return {
-    url: image.url ?? (image.b64_json ? `data:image/png;base64,${image.b64_json}` : null),
+    url: result.url ?? (result.b64_json ? `data:image/png;base64,${result.b64_json}` : null),
   };
 }
